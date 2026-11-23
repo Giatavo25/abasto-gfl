@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function logueado() { return request.auth != null; }
+    function perfil() { return get(/databases/$(database)/documents/usuarios/$(request.auth.uid)).data; }
+    function activo() { return logueado() && exists(/databases/$(database)/documents/usuarios/$(request.auth.uid)) && perfil().activo == true; }
+    function dueno() { return activo() && perfil().rol == 'dueno'; }
+    function ownerUid() { return get(/databases/$(database)/documents/config/sistema).data.ownerUid; }
+
+    // ---- Usuarios ----
+    match /usuarios/{uid} {
+      allow read: if (logueado() && request.auth.uid == uid) || dueno();
+      // Al registrarse: solo puede crear su propio perfil.
+      // Solo el dueño fundador puede nacer como 'dueno' activo; los demás nacen cajero inactivo.
+      allow create: if logueado() && request.auth.uid == uid && (
+        (request.resource.data.rol == 'cajero' && request.resource.data.activo == false) ||
+        (request.resource.data.rol == 'dueno' && ownerUid() == uid)
+      );
+      allow update: if dueno();
+      allow delete: if false;
+    }
+
+    // ---- Configuración ----
+    match /config/sistema {
+      allow read: if logueado();   // el registro necesita saber si ya existe un dueño
+      // Solo se crea una vez: el primer usuario queda como dueño fundador
+      allow create: if logueado() && request.resource.data.ownerUid == request.auth.uid;
+      allow update: if dueno() && request.resource.data.ownerUid == resource.data.ownerUid;
+    }
+    match /config/tasa {
+      allow read: if activo();
+      allow write: if dueno();
+    }
+    match /tasas/{fecha} {
+      allow read: if activo();
+      allow write: if dueno();
+    }
+
+    // ---- Productos (el dueño los crea y edita; todos los usuarios activos los ven) ----
+    match /productos/{id} {
+      allow read: if activo();
+      allow create, update: if dueno();
+      // El cajero solo puede descontar existencia al vender (no puede tocar precios ni costos)
+      allow update: if activo() && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['stock', 'actualizado']);
+      allow delete: if false;   // se desactivan, no se borran (se conserva el historial)
+    }
+    // ---- Movimientos de inventario (kárdex): no se editan ni se borran ----
+    match /movimientos/{id} {
+      allow read: if dueno();
+      allow create: if activo();
+      allow update, delete: if false;
+    }
+
+    // ---- Ventas: cada cajero registra las suyas; el dueño ve todas ----
+    match /ventas/{id} {
+      allow read: if dueno() || (activo() && resource.data.cajeroUid == request.auth.uid);
+      allow create: if activo() && request.resource.data.cajeroUid == request.auth.uid;
+      allow update: if dueno();   // (anulaciones, próxima entrega)
+      allow delete: if false;
+    }
+    // ---- Correlativo de ventas ----
+    match /config/contadores {
+      allow read, write: if activo();
+    }
+
+    // Todo lo demás cerrado hasta que se agreguen los módulos siguientes
+    match /{otro=**} {
+      allow read, write: if false;
+    }
+  }
+}

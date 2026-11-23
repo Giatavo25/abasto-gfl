@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Abasto GFL · Sistema de Control</title>
+  <meta name="theme-color" content="#5f8f6b">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Abasto GFL">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ PANTALLA DE ACCESO ============ -->
+  <section id="pantalla-auth" class="auth-wrap oculto">
+    <div class="auth-card">
+      <img src="logo.jpg" alt="Abasto GFL" class="auth-logo">
+      <p class="auth-sub">Sistema de Control Interno</p>
+
+      <div class="tabs">
+        <button class="tab activo" data-tab="login">Ingresar</button>
+        <button class="tab" data-tab="registro">Registrarse</button>
+      </div>
+
+      <!-- Login -->
+      <form id="form-login" class="form-auth">
+        <label>Correo electrónico
+          <input type="email" id="login-email" required autocomplete="email" placeholder="correo@ejemplo.com">
+        </label>
+        <label>Clave
+          <div class="input-clave">
+            <input type="password" id="login-clave" required autocomplete="current-password" placeholder="••••••">
+            <button type="button" class="ver-clave" data-target="login-clave">👁</button>
+          </div>
+        </label>
+        <button type="submit" class="btn btn-primario btn-bloque">Ingresar</button>
+        <button type="button" class="link" id="btn-ir-recuperar">¿Olvidaste tu clave?</button>
+      </form>
+
+      <!-- Registro -->
+      <form id="form-registro" class="form-auth oculto">
+        <label>Nombre completo
+          <input type="text" id="reg-nombre" required placeholder="Nombre y apellido">
+        </label>
+        <label>Correo electrónico
+          <input type="email" id="reg-email" required autocomplete="email" placeholder="correo@ejemplo.com">
+        </label>
+        <label>Clave (mínimo 6 caracteres)
+          <div class="input-clave">
+            <input type="password" id="reg-clave" required minlength="6" autocomplete="new-password">
+            <button type="button" class="ver-clave" data-target="reg-clave">👁</button>
+          </div>
+        </label>
+        <label>Repetir clave
+          <input type="password" id="reg-clave2" required minlength="6" autocomplete="new-password">
+        </label>
+        <button type="submit" class="btn btn-primario btn-bloque">Crear cuenta</button>
+        <p class="nota">El primer usuario registrado queda como <b>Dueño</b>. Los siguientes quedan como <b>Cajero</b> en espera de aprobación.</p>
+      </form>
+
+      <!-- Recuperar -->
+      <form id="form-recuperar" class="form-auth oculto">
+        <p class="nota">Escribe tu correo y te enviaremos un enlace para crear una clave nueva.</p>
+        <label>Correo electrónico
+          <input type="email" id="rec-email" required placeholder="correo@ejemplo.com">
+        </label>
+        <button type="submit" class="btn btn-primario btn-bloque">Enviar enlace</button>
+        <button type="button" class="link" id="btn-volver-login">← Volver a ingresar</button>
+      </form>
+
+      <p id="modo-demo-aviso" class="aviso-demo oculto">⚠️ Modo prueba local: los datos se guardan solo en este navegador. Configura Firebase en <code>script.js</code> para usar la nube.</p>
+    </div>
+    <p class="auth-pie">La Gloria sea para Dios</p>
+  </section>
+
+  <!-- ============ CUENTA PENDIENTE ============ -->
+  <section id="pantalla-pendiente" class="auth-wrap oculto">
+    <div class="auth-card centro">
+      <img src="logo-icono.png" alt="" class="logo-mini-grande">
+      <h2>Cuenta en espera</h2>
+      <p>Hola <b id="pend-nombre"></b>, tu cuenta fue creada. El dueño debe activarla antes de que puedas entrar al sistema.</p>
+      <button class="btn btn-secundario" id="btn-pend-refrescar">Ya me activaron, revisar</button>
+      <button class="link" id="btn-pend-salir">Cerrar sesión</button>
+    </div>
+  </section>
+
+  <!-- ============ APLICACIÓN ============ -->
+  <div id="app" class="oculto">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-marca">
+        <img src="logo-icono.png" alt="Abasto GFL">
+        <div>
+          <strong>Abasto GFL</strong>
+          <small>Control interno</small>
+        </div>
+      </div>
+      <nav id="menu" class="menu"></nav>
+      <div class="sidebar-pie">
+        <div class="usuario-chip">
+          <span class="avatar" id="u-avatar">?</span>
+          <div>
+            <strong id="u-nombre">—</strong>
+            <small id="u-rol" class="rol-badge">—</small>
+          </div>
+        </div>
+        <button class="btn btn-fantasma btn-bloque" id="btn-salir">Cerrar sesión</button>
+      </div>
+    </aside>
+    <div class="fondo-menu oculto" id="fondo-menu"></div>
+
+    <main class="principal">
+      <header class="topbar">
+        <button class="btn-icono solo-movil" id="btn-menu" aria-label="Menú">☰</button>
+        <h1 id="titulo-vista">Inicio</h1>
+        <div class="tasa-pill" id="tasa-pill" title="Tasa BCV del día">
+          <span>BCV</span>
+          <strong id="tasa-valor">—</strong>
+          <small id="tasa-fecha"></small>
+        </div>
+      </header>
+
+      <div id="vista" class="vista"></div>
+    </main>
+
+    <nav id="nav-inferior" class="nav-inferior"></nav>
+  </div>
+
+  <!-- ============ CARGANDO ============ -->
+  <div id="cargando" class="cargando">
+    <img src="logo-icono.png" alt="">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- ============ VENTANA MODAL ============ -->
+  <div id="modal" class="modal oculto">
+    <div class="modal-caja" id="modal-caja"></div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <!-- Firebase (compat: funciona abriendo el archivo directo o en GitHub Pages) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
