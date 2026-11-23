@@ -1,6 +1,6 @@
 // Service Worker: guarda la interfaz para que abra rápido y sin señal.
 // Los datos van por Firebase (que tiene su propio caché offline).
-const CACHE = "abasto-gfl-v4";
+const CACHE = "abasto-gfl-v5";
 const ARCHIVOS = ["./", "./index.html", "./styles.css", "./script.js", "./logo.jpg", "./logo-icono.png", "./manifest.json"];
 
 self.addEventListener("install", e => {

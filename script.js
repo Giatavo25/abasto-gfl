@@ -11,12 +11,12 @@
    MODO PRUEBA LOCAL (los datos quedan en este navegador).
    --------------------------------------------------------- */
 const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_PROYECTO.firebaseapp.com",
-  projectId: "TU_PROYECTO",
-  storageBucket: "TU_PROYECTO.appspot.com",
-  messagingSenderId: "000000000000",
-  appId: "1:000000000000:web:0000000000000000"
+  apiKey: "AIzaSyB3qBhvUeboSJQs7akGHXBeKTIC6HHgqss",
+  authDomain: "abasto-gfl.firebaseapp.com",
+  projectId: "abasto-gfl",
+  storageBucket: "abasto-gfl.firebasestorage.app",
+  messagingSenderId: "398191924194",
+  appId: "1:398191924194:web:d9e12587828dc265b55fbb"
 };
 
 const MODO_LOCAL = firebaseConfig.apiKey.startsWith("TU_");
