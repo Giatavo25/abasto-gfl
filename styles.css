@@ -420,3 +420,73 @@ kbd { font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight:
 .lista-espera li { display: grid; grid-template-columns: 1fr auto auto auto; gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--borde); border-radius: 12px; margin-bottom: 8px; background: var(--crema); }
 .lista-espera strong { font-size: 17px; color: var(--verde-osc); }
 @media (max-width: 860px) { .pos-espera-btns { grid-template-columns: 1fr 1fr; } .pos-espera-btns kbd { display: none; } }
+
+/* =========================================================
+   ENTREGA 4 · Compras, proveedores, autoconsumo y reportes
+   ========================================================= */
+.tabs-vista { max-width: 520px; margin-bottom: 16px; background: var(--verde-claro); }
+.cab-tarjeta { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
+.cab-tarjeta h3 { margin: 0; }
+.fila-compra { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.tabla-compra input[type=number] { width: 110px; display: inline-block; margin: 0; padding: 7px 9px; text-align: right; font-weight: 700; }
+.tabla-compra .check { justify-content: flex-end; }
+.pie-compra { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-top: 16px; position: sticky; bottom: 0; background: var(--crema); padding: 12px 0; z-index: 5; }
+.totales-compra { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; }
+.totales-compra > div { background: var(--blanco); border: 1px solid var(--borde); border-radius: 12px; padding: 9px 16px; min-width: 120px; }
+.totales-compra small { display: block; font-size: 12px; font-weight: 700; color: var(--texto-suave); }
+.totales-compra b { font-size: 19px; }
+.totales-compra span { display: block; font-size: 13px; font-weight: 700; color: var(--texto-suave); }
+.totales-compra .ok { background: var(--verde-claro); border-color: transparent; color: var(--verde-osc); }
+.totales-compra .mal { background: var(--rosa); border-color: transparent; color: var(--rosa-osc); }
+.btn-grande { font-size: 17px; padding: 13px 26px; }
+.aviso-compra { margin-top: 16px; }
+.aviso-compra.ok { background: var(--verde-claro); border: none; }
+.aviso-compra.mal { background: #fff1ef; border: 1.5px solid #f0b4ab; }
+.aviso-compra p { margin: 6px 0 10px; }
+.sub-titulo { margin: 16px 0 6px; color: var(--verde-osc); }
+.inactivo td { opacity: .55; }
+
+/* Selector de período */
+.periodo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 18px 0 14px; }
+.chip-btn { border: 1.5px solid var(--borde); background: var(--blanco); color: var(--texto); border-radius: 30px; padding: 7px 14px; font-weight: 700; font-size: 13.5px; }
+.chip-btn:hover { border-color: var(--verde); }
+.chip-btn.activo { background: var(--verde); border-color: var(--verde); color: #fff; }
+.periodo-fechas { display: flex; align-items: center; gap: 6px; margin-left: 4px; }
+.periodo-fechas input { width: auto; margin: 0; padding: 7px 9px; font-size: 13.5px; }
+.barra-rep .periodo { margin: 0; }
+
+/* Autoconsumo */
+.segmento-grande span { padding: 11px 8px; font-weight: 700; }
+.salida-prod { background: var(--crema); border: 1px dashed var(--borde); border-radius: 14px; padding: 14px; }
+.salida-info { margin-bottom: 12px; font-size: 16px; }
+.salida-costo { min-height: 22px; margin: -4px 0 12px; font-size: 14.5px; }
+.estado.tipo-autoconsumo { background: var(--lavanda); color: var(--lavanda-osc); }
+.estado.tipo-merma { background: var(--rosa); color: var(--rosa-osc); }
+.estado.tipo-vencido { background: var(--amarillo); color: var(--amarillo-osc); }
+
+/* Reportes */
+.rep-neta { display: grid; grid-template-columns: 1fr 1.3fr; gap: 20px; background: var(--verde-osc); color: #fff; border-radius: 20px; padding: 22px 24px; margin-bottom: 18px; box-shadow: var(--sombra); }
+.rep-neta.perdida { background: #b4473d; }
+.rep-neta small { font-weight: 800; letter-spacing: 1px; opacity: .85; }
+.rep-neta strong { display: block; font-size: 40px; line-height: 1.15; margin: 8px 0 4px; }
+.rep-neta > div > span { font-size: 18px; font-weight: 700; opacity: .9; }
+.rep-formula { background: rgba(255,255,255,.1); border-radius: 14px; padding: 12px 16px; font-size: 14.5px; }
+.rep-formula > div { display: flex; justify-content: space-between; padding: 3px 0; }
+.rep-formula .linea { border-top: 1px solid rgba(255,255,255,.25); margin-top: 4px; padding-top: 6px; font-weight: 800; }
+.rep-formula .total { font-size: 16px; }
+.rep-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.rep-grid table td, .rep-grid table th { padding: 8px; }
+tr.sub td { color: var(--texto-suave); }
+.fila-total td { border-top: 2px solid var(--borde); font-weight: 800; background: var(--crema); }
+tr.anulada td { opacity: .55; text-decoration: line-through; }
+tr.anulada td:first-child, tr.anulada td:last-child { text-decoration: none; }
+
+@media (max-width: 860px) {
+  .rep-neta { grid-template-columns: 1fr; }
+  .rep-neta strong { font-size: 30px; }
+  .rep-grid { grid-template-columns: 1fr; }
+  .periodo-fechas { width: 100%; margin: 0; }
+  .periodo-fechas input { flex: 1; }
+  .pie-compra { position: static; }
+  .tabla-compra input[type=number] { width: 88px; }
+}

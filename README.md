@@ -2,6 +2,7 @@
 
 ## Entregas
 - **1:** acceso, roles (Dueño/Cajero), tasa BCV y estructura base
+- **4:** Proveedores (cuentas por pagar y abonos), Compras (entrada por factura, actualiza costo y stock), Autoconsumo y Mermas (al costo), Utilidad y Reportes (utilidad neta, cuadre por tipo de pago, por producto, por cajero, anulación de ventas, exportar a Excel)
 - **3:** Punto de Venta (F10 cobrar, 01–05 tipos de pago, 99 guardar, alerta roja con sonido / señal verde)
 - **2:** productos, inventario en tiempo real, ajustes con kárdex y Lista de Precios (IVA, costo en Bs según la tasa, % de ganancia, alertas en rojo)
 
@@ -55,3 +56,10 @@ Sube la carpeta a un repositorio de GitHub y activa **GitHub Pages**. Desde el t
 - Rojo: ganancia negativa · Amarillo: ganancia entre 0 % y 10 %
 - `ventas/{id}` → numero (correlativo), dia, cajero, tasa, items[], totalBs, totalUsd, costoBs, utilidadBs, pagos[{codigo, tipo, moneda, monto, montoBs, ref}]
 - `config/contadores` → ventas (último correlativo)
+- `proveedores/{id}` → nombre, rif, telefono, contacto, dias, direccion, notas, activo
+- `compras/{id}` → proveedorId, factura, dia, condicion (contado|credito), moneda (USD|BS), tasa, items[], subtotalUsd, ivaUsd, totalUsd, totalBs, saldoUsd, abonos[]
+- `salidas/{id}` → dia, tipo (autoconsumo|merma|vencido), producto, cantidad, costoUsd, costoBs, nota
+
+### Utilidad neta
+Ventas − costo de lo vendido (costo con IVA × tasa del momento de la venta) − autoconsumo − mermas y vencidos (al costo).
+Las compras **no** se restan de la utilidad: entran al inventario y se convierten en costo cuando se venden.

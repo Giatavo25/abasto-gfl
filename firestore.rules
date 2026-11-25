@@ -64,6 +64,20 @@ service cloud.firestore {
       allow read, write: if activo();
     }
 
+    // ---- Proveedores, compras y salidas (autoconsumo / mermas): solo el dueño ----
+    match /proveedores/{id} {
+      allow read, create, update: if dueno();
+      allow delete: if false;
+    }
+    match /compras/{id} {
+      allow read, create, update: if dueno();
+      allow delete: if false;
+    }
+    match /salidas/{id} {
+      allow read, create: if dueno();
+      allow update, delete: if false;
+    }
+
     // Todo lo demás cerrado hasta que se agreguen los módulos siguientes
     match /{otro=**} {
       allow read, write: if false;
